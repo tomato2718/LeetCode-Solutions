@@ -1,0 +1,35 @@
+# 2028. Find Missing Observations
+
+## Code
+
+```py
+from typing import List
+
+
+class Solution:
+    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+        complement = self._find_complement(rolls, mean, n)
+        missing_rolls = self._find_missing_rolls(n, complement)
+        return missing_rolls
+
+    def _find_complement(self, rolls: List[int], mean: int, n: int) -> int:
+        total_count = len(rolls) + n
+        target_sum = mean * total_count
+        complement = target_sum - sum(rolls)
+        return complement
+
+    def _find_missing_rolls(self, n: int, complement: int) -> list[int]:
+        if 1 <= complement / n <= 6:
+            mean, left = divmod(complement, n)
+            missing_rolls = [mean + (1 if i < left else 0) for i in range(n)]
+        else:
+            missing_rolls = []
+        return missing_rolls
+
+
+solution = Solution()
+
+assert solution.missingRolls([3, 2, 4, 3], 4, 2) == [6, 6]
+assert solution.missingRolls([1, 5, 6], 3, 4) == [3, 2, 2, 2]
+assert solution.missingRolls([1, 2, 3, 4], 6, 4) == []
+```
